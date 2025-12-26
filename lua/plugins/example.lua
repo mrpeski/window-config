@@ -2,74 +2,74 @@
 -- stylua: ignore
 -- if true then return {} end
 return {
-  {
-  "olimorris/codecompanion.nvim",
-  dependencies = {
-    "nvim-lua/plenary.nvim",
-    "nvim-treesitter/nvim-treesitter",
-  },
-  opts = {
-    adapters = {
-    http = {
-      openai_responses = function()
-        return require("codecompanion.adapters").extend("openai_responses", {
-          env = {
-            api_key = "SOURCE_ONE",
-          },
-        })
-      end,
-        gemini = function()
-          return require("codecompanion.adapters").extend("gemini", {
-          env = {
-            api_key = "SOURCE_TWO",
-          },
-        })
-
-        end
-    },
-  },
-    display = {
-      diff = {
-        enabled = true,
-        close_chat_at = 240, -- Close an open chat buffer if the total columns of your display are less than...
-        layout = "vertical", -- vertical|horizontal split for default provider
-        opts = { "internal", "filler", "closeoff", "algorithm:patience", "followwrap", "linematch:120" },
-        provider = "mini_diff", -- default|mini_diff
-      },
-    },
-    strategies = {
-      chat = {
-        adapter = "gemini",
-      },
-      inline = {
-        adapter = "gemini",
-        keymaps = {
-          accept_change = {
-            modes = { n = "ga" },
-            description = "Accept the suggested change",
-          },
-          reject_change = {
-            modes = { n = "gr" },
-            description = "Reject the suggested change",
-          },
-        },
-      },
-      cmd = {
-        adapter = "gemini",
-      },
-    },
-    opts = {
-      -- Set debug logging
-      log_level = "DEBUG",
-    },
-  },
-  },
   {"neovim/nvim-lspconfig"},
   {'akinsho/toggleterm.nvim', version = "*", config = true},
   {
     "andrewferrier/debugprint.nvim",
     lazy = false, 
     version = "*"
-  }
+  },
+{
+  "https://gitlab.com/HiPhish/rainbow-delimiters.nvim",
+}, {
+  "folke/noice.nvim",
+  event = "VeryLazy",
+  opts = {
+    -- add any options here
+    view= "cmdline"
+  },
+  dependencies = {
+    -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+    "MunifTanjim/nui.nvim",
+    -- OPTIONAL:
+    --   `nvim-notify` is only needed, if you want to use the notification view.
+    "rcarriga/nvim-notify",
+    }
+}, {
+  "kevinhwang91/nvim-ufo",
+  dependencies = {
+    { "kevinhwang91/promise-async" },
+  },
+    opts = function ()
+      vim.o.foldcolumn = '1' -- '0' is not bad
+      vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+      vim.o.foldlevelstart = 99
+      vim.o.foldenable = true
 
+      -- Using ufo provider need remap `zR` and `zM`. If Neovim is 0.6.1, remap yourself
+      vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
+      vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
+
+
+      -- Option 2: nvim lsp as LSP client
+      -- Tell the server the capability of foldingRange,
+      -- Neovim hasn't added foldingRange to default capabilities, users must add it manually
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities.textDocument.foldingRange = {
+          dynamicRegistration = false,
+          lineFoldingOnly = true
+      }
+      local language_servers = vim.lsp.get_clients() -- or list servers manually like {'gopls', 'clangd'}
+      for _, ls in ipairs(language_servers) do
+          require('lspconfig')[ls].setup({
+              capabilities = capabilities
+              -- you can add other fields for setting up lsp server in this table
+          })
+      end
+      -- require('ufo').setup()
+    end
+},
+  {
+    'fei6409/log-highlight.nvim',
+    opts = {},
+},
+  {
+  'forest-nvim/maple.nvim',
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+  },
+  opts = {
+      -- Your configuration options here
+    }
+}
 }
