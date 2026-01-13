@@ -5,7 +5,14 @@ return {
   { "catppuccin/nvim" },
   { "olimorris/onedarkpro.nvim" },
   { "sainnhe/sonokai" },
-  { "wadackel/vim-dogrun" },
+  {
+    "wadackel/vim-dogrun",
+    lazy = false,
+    priority = 1000,
+    -- config = function()
+    --   -- vim.cmd.coloscheme("dogrun")
+    -- end,
+  },
   { "jacoborus/tender.vim" },
   { "dikiaap/minimalist" },
   { "bluz71/vim-nightfly-colors", name = "nightfly", lazy = false, priority = 1000 },
@@ -17,11 +24,11 @@ return {
   { "shaunsingh/nord.nvim", name = "nord" },
   {
     "rjshkhr/shadow.nvim",
-    priority = 1000,
-    config = function()
-      vim.opt.termguicolors = true
-      vim.cmd.colorscheme("shadow")
-    end,
+    -- priority = 1000,
+    -- config = function()
+    --   -- vim.opt.termguicolors = true
+    --   -- vim.cmd.colorscheme("shadow")
+    -- end,
   },
   { "dgox16/oldworld.nvim", name = "oldworld" },
   { "mellow-theme/mellow.nvim", name = "mellow" },
@@ -29,7 +36,7 @@ return {
   {
     "LazyVim/LazyVim",
     opts = {
-      colorscheme = "shadow",
+      colorscheme = "dogrun",
     },
   },
 }
