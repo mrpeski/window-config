@@ -1,0 +1,261 @@
+{
+  "DP 1D by Position": {
+    "prefix": "dp1dpy",
+    "body": [
+      "def ${1:solve_problem}(${2:arr}):",
+      "    # [INPUT]",
+      "    n = len(${2})",
+      "    if n == 0:",
+      "        return ${3:0}",
+      "",
+      "    # [STATE] - DP table",
+      "    dp = [${4:0}] * n",
+      "    dp[0] = ${5:base_case}",
+      "",
+      "    # [ITERATE]",
+      "    for i in range(1, n):",
+      "        # [CURRENT]",
+      "        current = ${2}[i]",
+      "",
+      "        # [ACCUMULATOR] - Query previous states",
+      "        best = ${6:0}",
+      "        for j in range(i):",
+      "            best = max(best, dp[j])",
+      "",
+      "        # [UPDATE]",
+      "        dp[i] = best + ${7:1}",
+      "",
+      "    # [RESULT]",
+      "    return ${8:max(dp)}"
+    ]
+  },
+  "DP 1D by Value": {
+    "prefix": "dp1dvalpy",
+    "body": [
+      "def ${1:solve_problem}(${2:choices}, ${3:target}):",
+      "    # [INPUT]",
+      "    n = ${3}",
+      "",
+      "    # [STATE] - DP table by value",
+      "    dp = [float('inf')] * (n + 1)",
+      "    dp[0] = 0",
+      "",
+      "    # [ITERATE] - For each value",
+      "    for value in range(1, n + 1):",
+      "        # [QUERY] - Try all choices",
+      "        for choice in ${2}:",
+      "            if value >= choice:",
+      "                # [UPDATE]",
+      "                dp[value] = min(dp[value], dp[value - choice] + 1)",
+      "",
+      "    # [RESULT]",
+      "    return -1 if dp[n] == float('inf') else dp[n]"
+    ]
+  },
+  "DP 2D Template": {
+    "prefix": "dp2dpy",
+    "body": [
+      "def ${1:solve_problem}(${2:str1}, ${3:str2}):",
+      "    # [INPUT]",
+      "    m, n = len(${2}), len(${3})",
+      "",
+      "    # [STATE] - 2D DP table",
+      "    dp = [[0] * (n + 1) for _ in range(m + 1)]",
+      "",
+      "    # [ITERATE]",
+      "    for i in range(1, m + 1):",
+      "        for j in range(1, n + 1):",
+      "            # [CURRENT]",
+      "            char1 = ${2}[i - 1]",
+      "            char2 = ${3}[j - 1]",
+      "",
+      "            # [QUERY & UPDATE]",
+      "            if char1 == char2:",
+      "                dp[i][j] = dp[i - 1][j - 1] + 1",
+      "            else:",
+      "                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])",
+      "",
+      "    # [RESULT]",
+      "    return dp[m][n]"
+    ]
+  },
+  "Two Pointers - Opposite Ends": {
+    "prefix": "2popppy",
+    "body": [
+      "def ${1:two_pointers}(${2:arr}, ${3:target}):",
+      "    # [INPUT]",
+      "    n = len(${2})",
+      "",
+      "    # [ITERATORS] - Two pointers",
+      "    left, right = 0, n - 1",
+      "",
+      "    # [ITERATE]",
+      "    while left < right:",
+      "        # [CURRENT]",
+      "        total = ${2}[left] + ${2}[right]",
+      "",
+      "        # [DECISION]",
+      "        if total == ${3}:",
+      "            return [left, right]",
+      "        elif total < ${3}:",
+      "            left += 1",
+      "        else:",
+      "            right -= 1",
+      "",
+      "    return [-1, -1]"
+    ]
+  },
+  "Two Pointers - Fast/Slow": {
+    "prefix": "2pfastpy",
+    "body": [
+      "def ${1:remove_duplicates}(${2:arr}):",
+      "    # [INPUT]",
+      "    n = len(${2})",
+      "    if n == 0:",
+      "        return 0",
+      "",
+      "    # [ITERATORS]",
+      "    slow = 0",
+      "",
+      "    # [ITERATE]",
+      "    for fast in range(1, n):",
+      "        # [CURRENT]",
+      "        if ${2}[fast] != ${2}[slow]:",
+      "            # [UPDATE]",
+      "            slow += 1",
+      "            ${2}[slow] = ${2}[fast]",
+      "",
+      "    # [RESULT]",
+      "    return slow + 1"
+    ]
+  },
+  "Sliding Window - Variable Size": {
+    "prefix": "swvarpy",
+    "body": [
+      "def ${1:longest_substring}(${2:s}):",
+      "    # [INPUT]",
+      "    n = len(${2})",
+      "",
+      "    # [STATE] - Window state",
+      "    seen = set()",
+      "    max_length = 0",
+      "    start = 0",
+      "",
+      "    # [ITERATE]",
+      "    for end in range(n):",
+      "        # [CURRENT] - Add to window",
+      "        while ${2}[end] in seen:",
+      "            seen.remove(${2}[start])",
+      "            start += 1",
+      "        seen.add(${2}[end])",
+      "",
+      "        # [UPDATE RESULT]",
+      "        max_length = max(max_length, end - start + 1)",
+      "",
+      "    # [RESULT]",
+      "    return max_length"
+    ]
+  },
+  "Hash Map - Two Sum": {
+    "prefix": "hmappy",
+    "body": [
+      "def ${1:two_sum}(${2:nums}, ${3:target}):",
+      "    # [STATE] - Hash map",
+      "    seen = {}",
+      "",
+      "    # [ITERATE]",
+      "    for i, num in enumerate(${2}):",
+      "        # [CURRENT]",
+      "        complement = ${3} - num",
+      "",
+      "        # [QUERY]",
+      "        if complement in seen:",
+      "            return [seen[complement], i]",
+      "",
+      "        # [UPDATE]",
+      "        seen[num] = i",
+      "",
+      "    return [-1, -1]"
+    ]
+  },
+  "Hash Map - Frequency Counter": {
+    "prefix": "hfreqpy",
+    "body": [
+      "# [STATE] - Frequency map",
+      "from collections import Counter",
+      "freq = Counter(${1:items})",
+      "",
+      "# OR manual:",
+      "# freq = {}",
+      "# for item in ${1}:",
+      "#     freq[item] = freq.get(item, 0) + 1",
+      "",
+      "# [PROCESS] - Use frequencies",
+      "$0"
+    ]
+  },
+  "For Loop range": {
+    "prefix": "foripy",
+    "body": [
+      "for i in range(${1:n}):",
+      "    $0"
+    ]
+  },
+  "For Loop range j": {
+    "prefix": "forjpy",
+    "body": [
+      "for j in range(${1:n}):",
+      "    $0"
+    ]
+  },
+  "For Loop Reversed": {
+    "prefix": "forrpy",
+    "body": [
+      "for i in range(${1:n} - 1, -1, -1):",
+      "    $0"
+    ]
+  },
+  "For In Loop": {
+    "prefix": "forinpy",
+    "body": [
+      "for ${1:item} in ${2:items}:",
+      "    $0"
+    ]
+  },
+  "List 0 Init": {
+    "prefix": "arr0py",
+    "body": [
+      "[0] * ${1:n}"
+    ]
+  },
+  "List Inf Init": {
+    "prefix": "arrinfpy",
+    "body": [
+      "[float('inf')] * ${1:n}"
+    ]
+  },
+  "2D List Init": {
+    "prefix": "arr2dpy",
+    "body": [
+      "[[${3:0}] * ${2:n} for _ in range(${1:m})]"
+    ]
+  },
+  "Import Math": {
+    "prefix": "impmath",
+    "body": [
+      "import math"
+    ]
+  },
+  "Import Collections": {
+    "prefix": "impcol",
+    "body": [
+      "from collections import ${1:Counter, defaultdict, deque}"
+    ]
+  },
+  "Import Heapq": {
+    "prefix": "imphq",
+    "body": [
+      "import heapq"
+    ]
+  }
+}

@@ -1,0 +1,276 @@
+{
+  "DP 1D by Position": {
+    "prefix": "dp1d",
+    "body": [
+      "function ${1:solveProblem}(${2:arr}) {",
+      "    // [INPUT]",
+      "    const n = ${2}.length;",
+      "    if (n === 0) return ${3:0};",
+      "",
+      "    // [STATE] - DP table",
+      "    const dp = new Array(n).fill(${4:0});",
+      "    dp[0] = ${5:baseCase};",
+      "",
+      "    // [ITERATE]",
+      "    for (let i = 1; i < n; i++) {",
+      "        // [CURRENT]",
+      "        const current = ${2}[i];",
+      "",
+      "        // [ACCUMULATOR] - Query previous states",
+      "        let best = ${6:0};",
+      "        for (let j = 0; j < i; j++) {",
+      "            best = Math.max(best, dp[j]);",
+      "        }",
+      "",
+      "        // [UPDATE]",
+      "        dp[i] = best + ${7:1};",
+      "    }",
+      "",
+      "    // [RESULT]",
+      "    return ${8:Math.max(...dp)};",
+      "}"
+    ],
+    "description": "DP 1D by Position - Full Template"
+  },
+  "DP 1D by Value": {
+    "prefix": "dp1dval",
+    "body": [
+      "function ${1:solveProblem}(${2:choices}, ${3:target}) {",
+      "    // [INPUT]",
+      "    const n = ${3};",
+      "",
+      "    // [STATE] - DP table by value",
+      "    const dp = new Array(n + 1).fill(Infinity);",
+      "    dp[0] = 0;",
+      "",
+      "    // [ITERATE] - For each value",
+      "    for (let value = 1; value <= n; value++) {",
+      "        // [QUERY] - Try all choices",
+      "        for (let choice of ${2}) {",
+      "            if (value >= choice) {",
+      "                // [UPDATE]",
+      "                dp[value] = Math.min(dp[value], dp[value - choice] + 1);",
+      "            }",
+      "        }",
+      "    }",
+      "",
+      "    // [RESULT]",
+      "    return dp[n] === Infinity ? -1 : dp[n];",
+      "}"
+    ],
+    "description": "DP 1D by Value (Coin Change style)"
+  },
+  "DP 2D Template": {
+    "prefix": "dp2d",
+    "body": [
+      "function ${1:solveProblem}(${2:str1}, ${3:str2}) {",
+      "    // [INPUT]",
+      "    const m = ${2}.length;",
+      "    const n = ${3}.length;",
+      "",
+      "    // [STATE] - 2D DP table",
+      "    const dp = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0));",
+      "",
+      "    // [ITERATE]",
+      "    for (let i = 1; i <= m; i++) {",
+      "        for (let j = 1; j <= n; j++) {",
+      "            // [CURRENT]",
+      "            const char1 = ${2}[i - 1];",
+      "            const char2 = ${3}[j - 1];",
+      "",
+      "            // [QUERY & UPDATE]",
+      "            if (char1 === char2) {",
+      "                dp[i][j] = dp[i - 1][j - 1] + 1;",
+      "            } else {",
+      "                dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);",
+      "            }",
+      "        }",
+      "    }",
+      "",
+      "    // [RESULT]",
+      "    return dp[m][n];",
+      "}"
+    ],
+    "description": "DP 2D Template (LCS style)"
+  },
+  "Two Pointers - Opposite Ends": {
+    "prefix": "2popp",
+    "body": [
+      "function ${1:twoPointers}(${2:arr}, ${3:target}) {",
+      "    // [INPUT]",
+      "    const n = ${2}.length;",
+      "",
+      "    // [ITERATORS] - Two pointers",
+      "    let left = 0;",
+      "    let right = n - 1;",
+      "",
+      "    // [ITERATE]",
+      "    while (left < right) {",
+      "        // [CURRENT]",
+      "        const sum = ${2}[left] + ${2}[right];",
+      "",
+      "        // [DECISION]",
+      "        if (sum === ${3}) {",
+      "            return [left, right];",
+      "        } else if (sum < ${3}) {",
+      "            left++;",
+      "        } else {",
+      "            right--;",
+      "        }",
+      "    }",
+      "",
+      "    return [-1, -1];",
+      "}"
+    ]
+  },
+  "Two Pointers - Fast/Slow": {
+    "prefix": "2pfast",
+    "body": [
+      "function ${1:removeDuplicates}(${2:arr}) {",
+      "    // [INPUT]",
+      "    const n = ${2}.length;",
+      "    if (n === 0) return 0;",
+      "",
+      "    // [ITERATORS]",
+      "    let slow = 0;",
+      "",
+      "    // [ITERATE]",
+      "    for (let fast = 1; fast < n; fast++) {",
+      "        // [CURRENT]",
+      "        if (${2}[fast] !== ${2}[slow]) {",
+      "            // [UPDATE]",
+      "            slow++;",
+      "            ${2}[slow] = ${2}[fast];",
+      "        }",
+      "    }",
+      "",
+      "    // [RESULT]",
+      "    return slow + 1;",
+      "}"
+    ]
+  },
+  "Sliding Window - Variable Size": {
+    "prefix": "swvar",
+    "body": [
+      "function ${1:longestSubstring}(${2:s}) {",
+      "    // [INPUT]",
+      "    const n = ${2}.length;",
+      "",
+      "    // [STATE] - Window state",
+      "    const seen = new Set();",
+      "    let maxLength = 0;",
+      "    let start = 0;",
+      "",
+      "    // [ITERATE]",
+      "    for (let end = 0; end < n; end++) {",
+      "        // [CURRENT] - Add to window",
+      "        while (seen.has(${2}[end])) {",
+      "            seen.delete(${2}[start]);",
+      "            start++;",
+      "        }",
+      "        seen.add(${2}[end]);",
+      "",
+      "        // [UPDATE RESULT]",
+      "        maxLength = Math.max(maxLength, end - start + 1);",
+      "    }",
+      "",
+      "    // [RESULT]",
+      "    return maxLength;",
+      "}"
+    ]
+  },
+  "Hash Map - Two Sum": {
+    "prefix": "hmap",
+    "body": [
+      "function ${1:twoSum}(${2:nums}, ${3:target}) {",
+      "    // [STATE] - Hash map",
+      "    const map = new Map();",
+      "",
+      "    // [ITERATE]",
+      "    for (let i = 0; i < ${2}.length; i++) {",
+      "        // [CURRENT]",
+      "        const complement = ${3} - ${2}[i];",
+      "",
+      "        // [QUERY]",
+      "        if (map.has(complement)) {",
+      "            return [map.get(complement), i];",
+      "        }",
+      "",
+      "        // [UPDATE]",
+      "        map.set(${2}[i], i);",
+      "    }",
+      "",
+      "    return [-1, -1];",
+      "}"
+    ]
+  },
+  "Hash Map - Frequency Counter": {
+    "prefix": "hfreq",
+    "body": [
+      "// [STATE] - Frequency map",
+      "const freq = new Map();",
+      "",
+      "// [ITERATE] - Count frequencies",
+      "for (let item of ${1:items}) {",
+      "    freq.set(item, (freq.get(item) || 0) + 1);",
+      "}",
+      "",
+      "// [PROCESS] - Use frequencies",
+      "$0"
+    ]
+  },
+  "For Loop i": {
+    "prefix": "fori",
+    "body": [
+      "for (let i = 0; i < ${1:n}; i++) {",
+      "    $0",
+      "}"
+    ],
+    "description": "for loop with i"
+  },
+  "For Loop j": {
+    "prefix": "forj",
+    "body": [
+      "for (let j = 0; j < ${1:n}; j++) {",
+      "    $0",
+      "}"
+    ],
+    "description": "for loop with j"
+  },
+  "For Loop Reversed": {
+    "prefix": "forr",
+    "body": [
+      "for (let i = ${1:n} - 1; i >= 0; i--) {",
+      "    $0",
+      "}"
+    ],
+    "description": "for loop reversed"
+  },
+  "For Of Loop": {
+    "prefix": "forof",
+    "body": [
+      "for (let ${1:item} of ${2:items}) {",
+      "    $0",
+      "}"
+    ],
+    "description": "for...of loop"
+  },
+  "New Array 0": {
+    "prefix": "arr0",
+    "body": [
+      "new Array(${1:n}).fill(0)"
+    ]
+  },
+  "New Array Inf": {
+    "prefix": "arrinf",
+    "body": [
+      "new Array(${1:n}).fill(Infinity)"
+    ]
+  },
+  "2D Array Init": {
+    "prefix": "arr2d",
+    "body": [
+      "Array.from({ length: ${1:m} }, () => new Array(${2:n}).fill(${3:0}))"
+    ]
+  }
+}
