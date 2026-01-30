@@ -6,11 +6,13 @@ return {
       "rcarriga/nvim-dap-ui",
       "mfussenegger/nvim-dap-python",
       "theHamsta/nvim-dap-virtual-text",
+      "mxsdev/nvim-dap-vscode-js",
     },
     config = function()
       local dap = require("dap")
       local dapui = require("dapui")
       local dap_python = require("dap-python")
+      local dap_js = require("dap-vscode-js")
 
       require("dapui").setup({})
       require("nvim-dap-virtual-text").setup({
@@ -19,6 +21,43 @@ return {
 
       dap_python.setup("python3")
 
+      dap_js.setup({
+        debugger_path = "~/.local/share/nvim/mason/bin/",
+        debugger_cmd = { "js-debug-adapter" },
+        adapters = { "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" }, -- which adapters to register in nvim-dap
+      })
+
+      for _, language in ipairs({ "typescript", "javascript" }) do
+        dap.configurations[language] = {
+          {
+            type = "pwa-node",
+            request = "launch",
+            name = "Launch file",
+            program = "${file}",
+            cwd = "${workspaceFolder}",
+          },
+          {
+            type = "pwa-node",
+            request = "attach",
+            name = "Attach",
+            address = "localhost",
+            port = 9229,
+            cwd = "${workspaceFolder}",
+            restart = true,
+          },
+        }
+      end
+      -- dap.adapters["pwa-node"] = {
+      --   type = "server",
+      --   host = "::1",
+      --   port = "${port}",
+      --   executable = {
+      --     command = "js-debug-adapter",
+      --     args = {
+      --       "${port}",
+      --     },
+      --   },
+      -- }
       vim.fn.sign_define("DapBreakpoint", {
         text = "",
         texthl = "DiagnosticSignError",
