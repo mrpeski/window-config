@@ -5,6 +5,23 @@ return {
     "nvim-treesitter/nvim-treesitter",
   },
   opts = {
+    extensions = {
+      mcphub = {
+        callback = "mcphub.extensions.codecompanion",
+        opts = {
+          -- MCP Tools
+          make_tools = true, -- create individual tools and server groups
+          show_server_tools_in_chat = true, -- list tools in chat when make_tools=true
+          add_mcp_prefix_to_tool_names = true, -- prefix tool names with `mcp__`
+          show_result_in_chat = true, -- show tool results directly in chat
+          format_tool = nil, -- optional formatter function
+          -- MCP Resources
+          make_vars = true, -- convert MCP resources to #variables
+          -- MCP Prompts
+          make_slash_commands = true, -- add MCP prompts as /slash commands
+        },
+      },
+    },
     adapters = {
       http = {
         openai_responses = function()

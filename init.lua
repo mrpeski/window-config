@@ -178,3 +178,5 @@ vim.api.nvim_create_autocmd({ "User" }, {
     end, 2000)
   end,
 })
+
+vim.o.termguicolors = true -- enable true‑color
