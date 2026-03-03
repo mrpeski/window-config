@@ -180,3 +180,19 @@ vim.api.nvim_create_autocmd({ "User" }, {
 })
 
 vim.o.termguicolors = true -- enable true‑color
+
+-- Load the helper module
+local ipynb = require("ipynb_glow")
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "ipynb",
+  callback = function()
+    -- <leader>mp will now preview the *current* markdown cell
+    vim.keymap.set(
+      "n",
+      "<leader>mp",
+      ipynb.preview_current_md_cell,
+      { buffer = true, desc = "Preview markdown cell (glow)" }
+    )
+  end,
+})
