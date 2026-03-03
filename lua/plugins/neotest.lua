@@ -3,6 +3,7 @@ return {
   dependencies = {
     "marilari88/neotest-vitest",
   },
+  event = "VeryLazy",
   config = function()
     require("neotest").setup({
       adapters = {
